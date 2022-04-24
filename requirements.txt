@@ -1,0 +1,9 @@
+django-cors-headers
+django-filter
+djoser
+pillow
+djangorestframework
+djangorestframework-simplejwt
+fcm_django
+firebase_admin
+qrcode
