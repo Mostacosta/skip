@@ -16,6 +16,7 @@ from nakdepaybackend.pagination import CustomResultsSetPagination, CustomResults
 import qrcode
 from django.conf import settings
 from django.contrib.auth import authenticate
+from rest_framework.decorators import api_view
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -168,10 +169,10 @@ class SearchUsers (APIView,CustomResultsSetPagination):
         serializer = SignUpSerializer(object, many=True)
         return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
 
-
-def my_view(request):
-    phone = request.POST['phone']
-    password = request.POST['password']
+@api_view(['POST'])
+def login(request):
+    phone = request.data['phone']
+    password = request.data['password']
     user = authenticate(request, phone=phone, password=password)
     if user is not None:
         token, created = Token.objects.get_or_create(user=user)
