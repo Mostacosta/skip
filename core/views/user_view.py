@@ -15,6 +15,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from nakdepaybackend.pagination import CustomResultsSetPagination, CustomResultsSetPagination1
 import qrcode
 from django.conf import settings
+from django.contrib.auth import authenticate
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -154,12 +155,26 @@ class SearchUsers (APIView,CustomResultsSetPagination):
     def get (self,request):
         filter_phone = request.GET.get("phone",None)
         filter_fullname = request.GET.get("full_name",None)
+        filter_pk = request.GET.get("pk",None)
         contacts = request.user.friends.all()
         if filter_phone:
             objects = contacts.filter(phone__contains=filter_phone)
         elif filter_fullname:
             objects = contacts.filter(full_name__contains=filter_fullname)
+        elif filter_pk:
+            objects = User.objects.filter(pk=filter_pk)
         
         object = self.paginate_queryset(objects, request)
         serializer = SignUpSerializer(object, many=True)
         return Response(self.get_paginated_response(serializer.data), status=status.HTTP_200_OK)
+
+
+def my_view(request):
+    phone = request.POST['phone']
+    password = request.POST['password']
+    user = authenticate(request, phone=phone, password=password)
+    if user is not None:
+        token, created = Token.objects.get_or_create(user=user)
+        return Response ({"access":token.key},status=status.HTTP_201_CREATED)
+    else:
+        return Response ({'error':'username or password are not correct'},status=status.HTTP_400_BAD_REQUEST)

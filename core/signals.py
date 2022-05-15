@@ -49,8 +49,9 @@ def send_noti_payment(sender, instance, created, **kwargs):
                 web_devices.send_message(Message(notification=Notification(title="alert", body=body_)))
 
 
+
 @receiver(post_save, sender=User)
 def create_token(sender, instance, created, **kwargs):
     if created:
         token = Token.objects.create(user=instance)
-        print(token.key)
+
