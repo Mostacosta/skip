@@ -176,6 +176,7 @@ def login(request):
     user = authenticate(request, phone=phone, password=password)
     if user is not None:
         token, created = Token.objects.get_or_create(user=user)
-        return Response ({"access":token.key},status=status.HTTP_201_CREATED)
+        return Response ({"access":token.key,'email':user.email
+        ,'balance':user.balance,'mobile':user.phone},status=status.HTTP_201_CREATED)
     else:
         return Response ({'error':'username or password are not correct'},status=status.HTTP_400_BAD_REQUEST)
