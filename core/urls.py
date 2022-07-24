@@ -2,6 +2,7 @@ from django.urls import path, re_path
 from core.views.notfication_view import NotficationRequestView, UserNotficationView, UserNotficationViewCount
 from core.views.paymentrequest_view import GenerateQR, PaymentRequestView, PaymentView
 from core.views.user_view import CheckPhone, CodeResponseView, Contacts, CustomTokenObtainPairView, FingerPrintView, SearchUsers, SignUpView, login
+from core.views.utility_view import UtilityView
 from core.views.version_view import check_app
 from django.conf.urls.static import static
 from django.conf import settings
@@ -33,6 +34,7 @@ urlpatterns = [
         {'post': 'create'}), name='create_fcm_device'),
     path('generate_qr',GenerateQR.as_view()),
     path('login',login),
+    path('utility',UtilityView.as_view())
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

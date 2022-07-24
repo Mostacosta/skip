@@ -127,5 +127,17 @@ class Notfication(models.Model):
     message = models.TextField()
     read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Utility (models.Model):
+    user = models.OneToOneField("User",on_delete=models.CASCADE,related_name='utilityuser')
+    
+class UtilityRequests(models.Model):
+    utility = models.ForeignKey("Utility",on_delete=models.CASCADE,related_name='utilityrequest')
+    amount = models.FloatField()
+    create_date = models.DateField()
+    sender = models.ForeignKey("User",on_delete=models.CASCADE,related_name="utilityrequestuser")
+    request = models.ForeignKey("PaymentRequest",on_delete=models.CASCADE,related_name='requestutility',null=True)
+    
+
     
 

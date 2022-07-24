@@ -47,6 +47,8 @@ def send_noti_payment(sender, instance, created, **kwargs):
             Notfication.objects.create(receiver=instance.sender,request=instance,message=body_)
             if web_devices.exists():
                 web_devices.send_message(Message(notification=Notification(title="alert", body=body_)))
+    instance.sender.save()
+    instance.receiver.save()
 
 
 
